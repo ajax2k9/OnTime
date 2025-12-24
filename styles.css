@@ -1,0 +1,75 @@
+canvas{
+    border-radius: 5px;
+}
+
+body{
+    background-color:hsl(240 80% 10%);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    color: white;
+}
+.menu{
+    display: block;
+    position: absolute;
+    left:850px;
+    top:0px;
+    width: 150px;
+    height: 800px;
+    background-color:black;
+    border-radius: 5px;
+    
+}
+
+.div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 270px;
+}
+
+.label{
+    display: block;
+    position: relative;
+    top: -10px;
+    left: 10px;
+}
+.sliderBkgd{
+    display: block;
+    height: 10;
+    width: 200;
+    position: relative;
+    left: 10px;
+    top: -20px;
+    background-color: black;
+    
+}
+
+.slider{
+    height: inherit;
+    width: 75%;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    background-color: brown;    
+}
+
+.colorDiv{
+    width: inherit;
+    height: 60px;
+    background-color:hsl(240 20% 60%);
+    border-radius: 5px;
+}
+
+.colorDiv:hover{
+        background-color:hsl(240 30% 80%);
+    }
+
+.colorBox{
+    display: block;
+    position: relative;
+    top: -50px;
+    left: 220px;
+    width: 40px;
+    height: 40px;
+    background-color: red;
+}
