@@ -9,7 +9,12 @@ class TrainStation{
         end.points[0].track = this.track
         tracks.push(this.track)
         trains.push(new Train(cart_num,end,this.c_idx,false))
-        
+        this.items = [];
+        this.reqs = [];
+    }
+
+    addItem(name,quant){
+        this.items.push(icons[name],quant)
     }
 
     draw(){

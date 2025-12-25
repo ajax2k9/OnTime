@@ -82,9 +82,9 @@ class Clock {
     drawFace(){
         noFill()
         strokeWeight(this.width)
-        stroke(180,130,80)
+        stroke(40,80,30)
         circle(0,10,this.radius*2)
-        stroke(200,150,100)
+        stroke(40,80,80)
         circle(0,0,this.radius*2)
     }
 

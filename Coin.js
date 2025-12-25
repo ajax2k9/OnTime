@@ -99,9 +99,9 @@ class CoinBasket {
 
     draw(){
         rectMode(CORNER)
-        fill(105,230,100)
+        fill(30,80,70)
         rect(this.x,this.y,this.w,this.h)
-        fill(100,70,50)
+        fill(30,50,50)
         rect(this.x,this.y+this.h,this.w,this.h/4)
 
         rectMode(CENTER)

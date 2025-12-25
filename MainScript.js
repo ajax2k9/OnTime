@@ -6,7 +6,7 @@ let switches;
 let spacing = 25;
 let bgColor;
 let trains = [];
-let lerpfr = 0;
+
 function preload(){
     loadImage("assets/coin.png",(img)=>{
         imgs["train"] = img
@@ -28,9 +28,11 @@ function preload(){
 
 
 function setup(){
-   const canvas = createCanvas(800, 1000);
-  canvas.elt.oncontextmenu = () => false; // Disables the context menu
-   angleMode(DEGREES)
+    const canvas = createCanvas(800, 1000);
+    imageMode(CENTER)
+    colorMode(HSL)
+    angleMode(DEGREES)
+    canvas.elt.oncontextmenu = () => false; // Disables the context menu
 
    tracks.push(new Track([
     vec(-7,0),
@@ -71,7 +73,6 @@ function keyPressed(event){
     if(key == ' '){
         event.preventDefault()
         clock.IncrementPos()
-        // trains[0].doAction()
     }
 
     if(key == 'r'){
@@ -88,18 +89,13 @@ function mouseReleased(){
 }
 
 function draw(){
-    lerpfr = lerp(lerpfr,frameRate(),0.05)
     fill(255)
-    colorMode(RGB)
-    imageMode(CENTER)
-    background(150,100,50);
-    noStroke()
-    text(floor(lerpfr),20,20)
+    background(220,30,60);
     translate(width/2,width/2)
     clock.draw()
     basket.draw()
     
-    colorMode(HSL)
+
     station.draw();
    
     tracks.forEach(t => {

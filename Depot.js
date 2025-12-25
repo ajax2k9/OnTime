@@ -1,5 +1,5 @@
 class TrainStation{
-    constructor(c_idx,name,cart_num,points,end){
+    constructor(name,item,points,end){
         this.points = points;
         this.c_idx = c_idx;
         this.name = name
