@@ -15,6 +15,10 @@ class Cart {
         this.item = name
     }
 
+    RemoveItem(){
+        this.item = undefined;
+    }
+
     draw(){
         this.pos = this.train.points[this.p_idx];
         let ang = 0
@@ -204,8 +208,18 @@ class Train{
     }
 
     HandleStation(station){
-       station.items.forEach(item=>{
-        if(item.quant > 0){
+        let req = station.req;
+        if(req && req.quant > 0){
+            this.carts.forEach(c=>{
+                if(c.item && c.item == req.name && req.quant > 0){
+                    c.RemoveItem()
+                    req.quant--;
+                }
+            })
+        }
+        
+        let item = station.item;
+        if(item && item.quant > 0){
             this.carts.forEach(c=>{
                 if(!c.item && item.quant > 0){
                     c.AddItem(item.name)
@@ -213,7 +227,6 @@ class Train{
                 }
             })
         }
-       })
     }
 
     draw(){

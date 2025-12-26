@@ -5,8 +5,6 @@ class TrainStation{
         this.c_idx = c_idx;
         this.name = name    
         this.track = trk
-        this.items = [];
-        this.reqs = [];
     }
 
     addTrain(cart_num,reverse){
@@ -14,7 +12,11 @@ class TrainStation{
     }
 
     addItem(name,quant){
-        this.items.push(new Item(this.points[0].x,this.points[0].y-30,name,quant))
+        this.item = new Item(this.points[0].x,this.points[0].y-30,name,quant)
+    }
+
+    addReq(name,quant){
+        this.req = new Item(this.points[0].x,this.points[0].y+20,name,quant)
     }
 
     draw(){
@@ -33,7 +35,8 @@ class TrainStation{
         fill(0,100,100)
         textAlign(CENTER)
         text(this.name,(x1+x2)/2,y1+10)
-
-        this.items.forEach(item=>item.draw())
+        
+        if(this.item)this.item.draw()
+        if(this.req)this.req.draw()
     }
 }

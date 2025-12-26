@@ -54,6 +54,7 @@ function setup(){
    stations.push(station)
 
    station = new TrainStation(1,"Doug",tracks[5])
+   station.addReq("person",4)
    stations.push(station)
 
    basket.addCoin(trains[0],imgs["coin"])
