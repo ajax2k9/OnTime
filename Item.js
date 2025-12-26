@@ -1,8 +1,9 @@
 class Item{
-    constructor(x,y,icon,quant,req){
+    constructor(x,y,name,quant,req){
         this.x = x
         this.y = y
-        this.icon = icon
+        this.name = name
+        this.icon = imgs[name]
         this.quant = quant
         this.req = req;
     }

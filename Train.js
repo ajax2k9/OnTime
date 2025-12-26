@@ -11,6 +11,10 @@ class Cart {
         this.pg.image(img,0,0)
     }
 
+    AddItem(name){
+        this.item = name
+    }
+
     draw(){
         this.pos = this.train.points[this.p_idx];
         let ang = 0
@@ -20,11 +24,17 @@ class Cart {
         } else {
             ang = this.train.dir.heading()
         }
+        
+
         push()
             translate(this.pos.x,this.pos.y)
             rotate(ang)
             image(this.pg,0,0)
         pop()
+        if(this.item){
+            image(imgs[this.item],this.pos.x,this.pos.y)
+        }
+    
     }
 }
 
@@ -38,17 +48,15 @@ class Train{
         this.reverse = reverse;
         this.speed = 2;
         this.spacing = 15;
-
-        this.index = 0;
         this.move = false;    
-        if(reverse){
+        if(!this.reverse){
+            this.index = track.GetPointNum()-1;
             this.pos = track.GetLastPoint();
-            let p = this.track.points[this.index-1]
-            this.dir = p5.Vector.sub(p, this.pos).normalize();
+            this.dir = createVector(1,0)
         } else {
+            this.index = 0;
             this.pos = track.GetFirstPoint();
-            let p = this.track.points[this.index+1]
-            this.dir = p5.Vector.sub(p, this.pos).normalize();
+            this.dir = createVector(-1,0)
         }
 
         this.addCarts();
@@ -79,11 +87,8 @@ class Train{
     }
 
     addCarts(){
-        
-        let p0 = this.pos.copy();
-        let p1 = this.track.GetLastPoint();
         for(let i = 0; i < this.cart_num; i++){
-            this.points[i] = p5.Vector.sub(p0,p1).normalize().mult(i*this.spacing).add(p0);
+            this.points[i] =p5.Vector.mult(this.dir,i*this.spacing*-1).add(this.pos);
             this.carts.push(new Cart(this,this.c_idx,i))
         }
     }
@@ -120,7 +125,7 @@ class Train{
         let t = this.track;
         let p0 = this.pos
         let p1 = t.points[idx]
-        console.log(d1)
+
 
         while(d > d1){
             d -= d1
@@ -198,6 +203,19 @@ class Train{
         this.move = true;
     }
 
+    HandleStation(station){
+       station.items.forEach(item=>{
+        if(item.quant > 0){
+            this.carts.forEach(c=>{
+                if(!c.item && item.quant > 0){
+                    c.AddItem(item.name)
+                    item.quant--;
+                }
+            })
+        }
+       })
+    }
+
     draw(){
         if(this.move){
             this.updatePoints()
@@ -205,6 +223,11 @@ class Train{
                 this.HandleReverseMove()
             } else {
                 this.HandleMove()
+            }
+        } else {
+            let p = this.track.points[this.index]
+            if(p.station){
+                this.HandleStation(p.station)
             }
         }
         this.carts.forEach(c=>c.draw())

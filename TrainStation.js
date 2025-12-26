@@ -1,20 +1,20 @@
 class TrainStation{
-    constructor(c_idx,name,cart_num,points,end){
-        this.points = points;
+    constructor(c_idx,name,trk){
+        this.points = [trk.GetFirstPoint(),trk.GetLastPoint()];
+        trk.SetStation(this)
         this.c_idx = c_idx;
-        this.name = name
-        //TODO add train spawn
-        this.track = new Track(this.points);
-        this.track.points[1].track = end;
-        end.points[0].track = this.track
-        tracks.push(this.track)
-        trains.push(new Train(cart_num,end,this.c_idx,false))
+        this.name = name    
+        this.track = trk
         this.items = [];
         this.reqs = [];
     }
 
+    addTrain(cart_num,reverse){
+        trains.push(new Train(cart_num,this.track,this.c_idx,reverse))
+    }
+
     addItem(name,quant){
-        this.items.push(icons[name],quant)
+        this.items.push(new Item(this.points[0].x,this.points[0].y-30,name,quant))
     }
 
     draw(){
@@ -33,5 +33,7 @@ class TrainStation{
         fill(0,100,100)
         textAlign(CENTER)
         text(this.name,(x1+x2)/2,y1+10)
+
+        this.items.forEach(item=>item.draw())
     }
 }

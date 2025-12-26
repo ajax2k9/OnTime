@@ -1,9 +1,12 @@
 class Track {
     constructor(points) {
         this.points = points;
-        this.color = color(0)
     }
-   
+
+    SetStation(station){
+        this.points[0].station = station;
+        this.points[this.points.length-1].station = station;
+    }
 
     GetFirstPoint(){
         return this.points[0].copy()
@@ -39,7 +42,7 @@ class Track {
 
     draw(){
         strokeWeight(2)
-         stroke(this.color)
+         stroke(0)
           for(let i = 0; i < this.points.length-1; i++){
             let p1 = this.points[i];
             let p2 = this.points[i+1];
