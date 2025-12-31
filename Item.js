@@ -6,7 +6,7 @@ class Item{
         this.icon = imgs[name]
         this.quant = quant
         if(maxQuant){
-            this.maxQuant = quant
+            this.maxQuant = maxQuant
         } else {
             this.maxQuant = 5
         }

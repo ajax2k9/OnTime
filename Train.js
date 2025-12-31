@@ -209,11 +209,11 @@ class Train{
 
     HandleStation(station){
         let req = station.req;
-        if(req && req.quant > 0){
+        if(req && req.quant < req.maxQuant){
             this.carts.forEach(c=>{
-                if(c.item && c.item == req.name && req.quant > 0){
+                if(c.item && c.item == req.name && req.quant < req.maxQuant){
                     c.RemoveItem()
-                    req.quant--;
+                    req.quant++;
                 }
             })
         }
