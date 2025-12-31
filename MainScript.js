@@ -2,7 +2,7 @@ let tracks =[];
 let clock;
 let basket;
 let imgs = {};
-let img_names = ["coin","switch","train_front","train_body","person","log","coal"];
+let img_names = ["coin","switch","train_front","train_body","person","log","coal","in","out"];
 let switches;
 let spacing = 25;
 let bgColor;

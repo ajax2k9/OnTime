@@ -12,11 +12,11 @@ class TrainStation{
     }
 
     addItem(name,quant){
-        this.item = new Item(this.points[0].x,this.points[0].y-30,name,quant)
+        this.item = new Item(this.points[1].x+2,this.points[0].y-33,name,quant)
     }
 
     addReq(name,quant){
-        this.req = new Item(this.points[0].x,this.points[0].y+20,name,quant)
+        this.req = new Item(this.points[1].x+2,this.points[0].y+24,name,quant)
     }
 
     draw(){
@@ -36,7 +36,21 @@ class TrainStation{
         textAlign(CENTER)
         text(this.name,(x1+x2)/2,y1+10)
         
-        if(this.item)this.item.draw()
-        if(this.req)this.req.draw()
+        strokeWeight(1)
+        fill(0,0,100)
+        
+        rect(x1,y1-3,x2,y1-25,5)
+        image(imgs["in"],x1+8,y1-14)
+        rect(x1,y2+3,x2,y2+25,5)
+        image(imgs["out"],x1+8,y2+14)
+
+        if(this.item){
+          image(imgs[this.item.name],x1-7,y1-14)  
+          this.item.draw()  
+        } 
+        if(this.req){
+            image(imgs[this.req.name],x1-7,y2+14)
+            this.req.draw()
+        }
     }
 }

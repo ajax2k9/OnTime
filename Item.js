@@ -1,15 +1,19 @@
 class Item{
-    constructor(x,y,name,quant){
+    constructor(x,y,name,quant,maxQuant){
         this.x = x
         this.y = y
         this.name = name
         this.icon = imgs[name]
         this.quant = quant
+        if(maxQuant){
+            this.maxQuant = quant
+        } else {
+            this.maxQuant = 5
+        }
     }
-
     draw(){
-        textAlign(LEFT)
-        image(this.icon,this.x,this.y)
-        text(this.quant,this.x+5,this.y+10)
+         for(let i = 0; i < this.quant; i++){
+                image(imgs[this.name],this.x-5*i,this.y)
+            }
     }
 }
