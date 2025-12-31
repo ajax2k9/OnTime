@@ -8,6 +8,10 @@ let spacing = 25;
 let bgColor;
 let trains = [];
 let stations = []
+let startClock = false;
+let time = 0;
+let interval = 2;
+let nextTime = 2;
 function preload(){
 
     img_names.forEach(iname=>{
@@ -65,7 +69,8 @@ function setup(){
 function keyPressed(event){
     if(key == ' '){
         event.preventDefault()
-        clock.IncrementPos()
+        startClock = !startClock;
+        
     }
 
     if(key == 'r'){
@@ -82,6 +87,14 @@ function mouseReleased(){
 }
 
 function draw(){
+    if(startClock){
+        time+=1/frameRate();
+        if(time >= nextTime){
+            clock.IncrementPos();
+            nextTime+= interval
+        }
+    }
+
     fill(255)
     background(220,30,60);
     translate(width/2,width/2)
