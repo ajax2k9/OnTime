@@ -2,7 +2,7 @@ class TrainStation{
     constructor(c_idx,name,trk,p1,p2){
         if(!p1 || !p2){
             p1 = 0;
-            p2 = trk.GetPointNum()-1;
+            p2 = trk.GetLastIndex();
         }
         this.points = [trk.points[p1],trk.points[p2]];
         trk.SetStation(this,p1,p2)

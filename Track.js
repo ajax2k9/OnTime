@@ -32,8 +32,8 @@ class Track {
         this.points[this.points.length - 1].track = track;
     }
 
-    GetPointNum(){
-        return this.points.length;
+    GetLastIndex(){
+        return this.points.length - 1;
     }
 
     GetLeg(i){

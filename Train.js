@@ -54,7 +54,7 @@ class Train{
         this.spacing = 15;
         this.move = false;    
         if(!this.reverse){
-            this.index = track.GetPointNum()-1;
+            this.index = track.GetLastIndex();
             this.pos = track.GetLastPoint();
             this.dir = createVector(1,0)
         } else {
@@ -65,32 +65,45 @@ class Train{
 
         this.addCarts();
     }
-
-     HandleMove(){
-        let t = this.track;
-        if(this.index == t.GetPointNum() - 1){
-            if(t.GetLastTrack()){
-                this.track = t.GetLastTrack()
-                this.index = 0;
+    
+    Advance(track,end){
+        if(this.index == end){
+            if(track){
+                this.track = track
+                this.index = this.reverse?track.GetLastIndex():0
             } else {
-                this.reverse = true
+                this.reverse != this.reverse
                 this.flipPoints()
                 return
             }
         }
-        
-        let p = this.track.points[this.index+1]
-        this.dir = p5.Vector.sub(p, this.pos).normalize();
-        let d = this.pos.dist(p)
+    }
+
+    CalcSpeed(offset){
+        this.p = this.track.points[this.index+offset]
+        this.dir = p5.Vector.sub(this.p, this.pos).normalize();
+        let d = this.pos.dist(this.p)
         let speed = min(this.speed,d)
-        this.pos.add(this.dir.mult(speed)); 
+        this.pos.add(this.dir.mult(speed));
         
-        if( d < 1){
-            if(p.station && p == p.station.points[1]){//stop at station
-                if(this.index == t.GetPointNum() - 2 && !t.GetLastTrack()){
-                    this.reverse = true
-                    this.index++; 
-                    this.flipPoints()
+        return d
+    }
+
+    FlipTrain(idx){
+        this.reverse = !this.reverse
+        this.index=idx; 
+        this.flipPoints()
+    }    
+
+
+    HandleMove(){
+        let t = this.track;
+        this.Advance(t.GetLastTrack(),t.GetLastIndex())
+
+        if(this.CalcSpeed(1) < 1){
+            if(this.p.station && this.p == this.p.station.points[1]){//stop at station
+                if(this.index == t.GetLastIndex() - 1 && !t.GetLastTrack()){
+                    this.FlipTrain(t.GetLastIndex())
                     return
                 }
                 this.move = false
@@ -101,30 +114,12 @@ class Train{
 
      HandleReverseMove(){
         let t = this.track;
-        if(this.index == 0){
+        this.Advance(t.GetFirstTrack(),0)
 
-            if(t.GetFirstTrack()){
-                this.track = t.GetFirstTrack()
-                this.index = this.track.GetPointNum()-1;
-            } else {
-                this.reverse = true
-                this.flipPoints()
-                return
-            }
-        }
-        
-        let p = this.track.points[this.index-1]
-        this.dir = p5.Vector.sub(p, this.pos).normalize();
-        let d = this.pos.dist(p)
-        let speed = min(this.speed,d)
-        this.pos.add(this.dir.mult(speed)); 
-        
-        if( d < 1){
-            if(p.station && p == p.station.points[0]){//stop at station
+        if(this.CalcSpeed(-1) < 1){
+            if(this.p.station && this.p == this.p.station.points[0]){//stop at station
                 if(this.index == 1 && !t.GetFirstTrack()){
-                    this.reverse = false 
-                    this.index = 0
-                    this.flipPoints()
+                    this.FlipTrain(0)
                     return
                 }
                 this.move = false
@@ -151,7 +146,7 @@ class Train{
             if(idx == 0){
                 t = t.GetFirstTrack();
                 if(!t)break;
-                idx = t.GetPointNum() -1   
+                idx = t.GetLastIndex()   
             } 
 
             if(t){
@@ -176,7 +171,7 @@ class Train{
 
         while(d > d1){
             d -= d1
-            if(idx == t.GetPointNum()-1){
+            if(idx == t.GetLastIndex()){
                 t = t.GetLastTrack()
             
                 if(!t)break;
