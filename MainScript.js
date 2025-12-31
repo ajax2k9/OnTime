@@ -2,7 +2,7 @@ let tracks =[];
 let clock;
 let basket;
 let imgs = {};
-let img_names = ["coin","switch","train_front","train_body","person","log","coal","in","out"];
+let img_names = ["coin","switch","train_front","train_body","person","log","coal","in","out","cog"];
 let switches;
 let spacing = 25;
 let bgColor;
@@ -53,12 +53,13 @@ function setup(){
    clock = new Clock();
    basket = new CoinBasket();
    let station = new TrainStation(0,"Guss",tracks[4])
-   station.addItem("person",5)
+   station.addItem("log",5)
+   station.addReq("coal",0)
    station.addTrain(3,false)
    stations.push(station)
 
    station = new TrainStation(1,"Doug",tracks[5])
-   station.addReq("person",0,5)
+   station.setRecipe("log","coal")
    stations.push(station)
 
    basket.addCoin(trains[0],imgs["coin"])
@@ -70,7 +71,7 @@ function keyPressed(event){
     if(key == ' '){
         event.preventDefault()
         startClock = !startClock;
-        
+
     }
 
     if(key == 'r'){

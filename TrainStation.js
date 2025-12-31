@@ -5,9 +5,17 @@ class TrainStation{
         this.c_idx = c_idx;
         this.name = name    
         this.track = trk
-        this.cycles = 2;
-        this.time = 0;
+        this.cycles = 1/2;
         this.nextTime = interval/this.cycles;
+        this.crafting = false;
+        this.cogAng = 0;
+    }
+
+    setRecipe(input,output){
+        this.crafting = true;
+        this.addReq(input,0)
+        this.addItem(output,0)
+        this.recipe={"in":input,"out":output}
     }
 
     addTrain(cart_num,reverse){
@@ -23,6 +31,14 @@ class TrainStation{
     }
 
     HandleProcess(){
+        if(this.crafting){
+            if(this.req.quant > 0 && this.item.quant < this.item.maxQuant){
+                this.req.quant--;
+                this.item.quant++;
+            }
+            return
+        }
+        
         if(this.item && this.item.quant < this.item.maxQuant){
             this.item.quant++;
         }
@@ -58,9 +74,23 @@ class TrainStation{
         fill(0,0,100)
         
         rect(x1,y1-3,x2,y1-25,5)
-        image(imgs["in"],x1+8,y1-14)
         rect(x1,y2+3,x2,y2+25,5)
-        image(imgs["out"],x1+8,y2+14)
+        if(this.crafting){
+            if(this.req.quant > 0)this.cogAng+=2
+            push()
+                translate(x1+8,y1-14)
+                rotate(this.cogAng)
+                image(imgs["cog"],0,0)
+            pop()
+            push()
+                translate(x1+8,y2+14)
+                rotate(this.cogAng)
+                image(imgs["cog"],0,0)
+            pop()
+        } else {
+            image(imgs["in"],x1+8,y1-14)
+            image(imgs["out"],x1+8,y2+14)
+        }
 
         if(this.item){
           image(imgs[this.item.name],x1-7,y1-14)  
