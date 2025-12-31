@@ -3,9 +3,9 @@ class Track {
         this.points = points;
     }
 
-    SetStation(station){
-        this.points[0].station = station;
-        this.points[this.points.length-1].station = station;
+    SetStation(station,p1,p2){
+        this.points[p1].station = station;
+        this.points[p2].station = station;
     }
 
     GetFirstPoint(){

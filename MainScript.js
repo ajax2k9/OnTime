@@ -62,6 +62,9 @@ function setup(){
    station.setRecipe("log","coal")
    stations.push(station)
 
+   station = new TrainStation(2,"Gary",tracks[1],1,2)
+   stations.push(station)
+
    basket.addCoin(trains[0],imgs["coin"])
    basket.addCoin(trains[0],imgs["coin"])
    basket.addCoin(trains[0],imgs["coin"])
@@ -70,8 +73,8 @@ function setup(){
 function keyPressed(event){
     if(key == ' '){
         event.preventDefault()
-        startClock = !startClock;
-
+        // startClock = !startClock;
+        trains[0].doAction()
     }
 
     if(key == 'r'){

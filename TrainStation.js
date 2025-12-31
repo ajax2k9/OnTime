@@ -1,7 +1,11 @@
 class TrainStation{
-    constructor(c_idx,name,trk){
-        this.points = [trk.GetFirstPoint(),trk.GetLastPoint()];
-        trk.SetStation(this)
+    constructor(c_idx,name,trk,p1,p2){
+        if(!p1 || !p2){
+            p1 = 0;
+            p2 = trk.GetPointNum()-1;
+        }
+        this.points = [trk.points[p1],trk.points[p2]];
+        trk.SetStation(this,p1,p2)
         this.c_idx = c_idx;
         this.name = name    
         this.track = trk
@@ -55,7 +59,7 @@ class TrainStation{
             }
         } 
         let x1 = this.points[0].x - 5
-        let x2 = this.points[1].x + 10
+        let x2 = this.points[1].x + 5
         let y1 = this.points[0].y - 20
         let y2 = this.points[1].y + 10
 
@@ -72,33 +76,36 @@ class TrainStation{
         
         strokeWeight(1)
         fill(0,0,100)
-        
-        rect(x1,y1-3,x2,y1-25,5)
-        rect(x1,y2+3,x2,y2+25,5)
-        if(this.crafting){
-            if(this.req.quant > 0)this.cogAng+=2
-            push()
-                translate(x1+8,y1-14)
-                rotate(this.cogAng)
-                image(imgs["cog"],0,0)
-            pop()
-            push()
-                translate(x1+8,y2+14)
-                rotate(this.cogAng)
-                image(imgs["cog"],0,0)
-            pop()
-        } else {
-            image(imgs["in"],x1+8,y1-14)
-            image(imgs["out"],x1+8,y2+14)
-        }
-
+          
         if(this.item){
-          image(imgs[this.item.name],x1-7,y1-14)  
-          this.item.draw()  
+            rect(x1,y1-3,x2,y1-25,5)
+            image(imgs[this.item.name],x1-7,y1-14)  
+            this.item.draw()
+            if(this.crafting){
+                push()
+                    translate(x1+8,y1-14)
+                    rotate(this.cogAng)
+                    image(imgs["cog"],0,0)
+                pop()
+            }  else {
+                 image(imgs["in"],x1+8,y1-14)
+            } 
         } 
+
         if(this.req){
+            rect(x1,y2+3,x2,y2+25,5)
             image(imgs[this.req.name],x1-7,y2+14)
             this.req.draw()
+             if(this.crafting){
+                if(this.req.quant > 0)this.cogAng+=2
+                push()
+                    translate(x1+8,y2+14)
+                    rotate(this.cogAng)
+                    image(imgs["cog"],0,0)
+                pop()
+            }  else {
+                 image(imgs["out"],x1+8,y2+14)
+            } 
         }
     }
 }

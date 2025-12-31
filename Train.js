@@ -67,26 +67,69 @@ class Train{
     }
 
      HandleMove(){
-        if(this.index < this.track.GetPointNum()-1){
-
-            let p = this.track.points[this.index+1]
-            this.dir = p5.Vector.sub(p, this.pos).normalize();
-            let d = this.pos.dist(p)
-            let speed = min(this.speed,d)
-            this.pos.add(this.dir.mult(speed)); 
-            
-            if( d < 1){
-                this.index++;
+        let t = this.track;
+        if(this.index == t.GetPointNum() - 1){
+            if(t.GetLastTrack()){
+                this.track = t.GetLastTrack()
+                this.index = 0;
+            } else {
+                this.reverse = true
+                this.flipPoints()
+                return
             }
-        } else if(this.track.GetLastTrack()){
-            let t = this.track.GetLastTrack();
-            this.track = t;
-            this.index = 0;
-        } else {
-            this.pos = this.track.GetLastPoint()
-            this.move = false;
-            this.reverse = !this.reverse;
-            this.flipPoints()
+        }
+        
+        let p = this.track.points[this.index+1]
+        this.dir = p5.Vector.sub(p, this.pos).normalize();
+        let d = this.pos.dist(p)
+        let speed = min(this.speed,d)
+        this.pos.add(this.dir.mult(speed)); 
+        
+        if( d < 1){
+            if(p.station && p == p.station.points[1]){//stop at station
+                if(this.index == t.GetPointNum() - 2 && !t.GetLastTrack()){
+                    this.reverse = true
+                    this.index++; 
+                    this.flipPoints()
+                    return
+                }
+                this.move = false
+            } 
+            this.index++;  
+        }
+    }
+
+     HandleReverseMove(){
+        let t = this.track;
+        if(this.index == 0){
+
+            if(t.GetFirstTrack()){
+                this.track = t.GetFirstTrack()
+                this.index = this.track.GetPointNum()-1;
+            } else {
+                this.reverse = true
+                this.flipPoints()
+                return
+            }
+        }
+        
+        let p = this.track.points[this.index-1]
+        this.dir = p5.Vector.sub(p, this.pos).normalize();
+        let d = this.pos.dist(p)
+        let speed = min(this.speed,d)
+        this.pos.add(this.dir.mult(speed)); 
+        
+        if( d < 1){
+            if(p.station && p == p.station.points[0]){//stop at station
+                if(this.index == 1 && !t.GetFirstTrack()){
+                    this.reverse = false 
+                    this.index = 0
+                    this.flipPoints()
+                    return
+                }
+                this.move = false
+            } 
+            this.index--;  
         }
     }
 
@@ -165,28 +208,6 @@ class Train{
        }
     }
     
-    HandleReverseMove(){
-        if(this.index  > 0){
-            let p = this.track.points[this.index-1]
-            this.dir = p5.Vector.sub(p, this.pos).normalize();
-            let d = this.pos.dist(p)
-            let speed = min(this.speed,d)
-            this.pos.add(this.dir.mult(speed)); 
-            if( d < 4){
-                this.index--;
-            }
-        } else if(this.track.GetFirstTrack()){
-            let t = this.track.GetFirstTrack();
-            this.track = t;
-            this.index = t.points.length -1;
-        } else {
-            this.pos = this.track.GetFirstPoint()
-            this.move = false;
-            this.reverse = !this.reverse;
-            this.flipPoints()
-        }
-    }
-
     flipPoints(){
         let temp = [...this.points]
         for(let i =0; i < this.points.length; i++){
