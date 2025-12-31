@@ -5,6 +5,9 @@ class TrainStation{
         this.c_idx = c_idx;
         this.name = name    
         this.track = trk
+        this.cycles = 2;
+        this.time = 0;
+        this.nextTime = interval/this.cycles;
     }
 
     addTrain(cart_num,reverse){
@@ -19,7 +22,22 @@ class TrainStation{
         this.req = new Item(this.points[1].x+2,this.points[0].y+24,name,quant)
     }
 
+    HandleProcess(){
+        if(this.item && this.item.quant < this.item.maxQuant){
+            this.item.quant++;
+        }
+        if(this.req && this.req.quant > 0){
+            this.req.quant--;
+        }
+    }
+
     draw(){
+        if(startClock){
+            if(time >this.nextTime){
+                this.HandleProcess();
+                this.nextTime += interval/this.cycles
+            }
+        } 
         let x1 = this.points[0].x - 5
         let x2 = this.points[1].x + 10
         let y1 = this.points[0].y - 20
