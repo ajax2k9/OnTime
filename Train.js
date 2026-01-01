@@ -135,70 +135,56 @@ class Train{
         }
     }
 
-    calcPoint(d,idx){
-        let d1 = this.pos.dist(this.track.points[idx])
-        let t = this.track;
-        let p0 = this.pos
-        let p1 = t.points[idx]
+    calcPoint(max_dist,idx){
+        let p0 = this.points[idx - 1] // look at first point
+        let p1 = this.p_track.points[this.p_idx]  // set second control point to prev point
+        let d = p0.dist(p1)
 
-        while(d > d1){
-            d -= d1
-            if(idx == 0){
-                t = t.GetFirstTrack();
-                if(!t)break;
-                idx = t.GetLastIndex()   
-            } 
-
-            if(t){
-                d1 = t.GetLeg(idx - 1)
-            } else {
-                break;
+        if(max_dist > d){
+            max_dist -=d
+            if(this.p_idx == 0){
+                this.p_track = this.p_track.GetFirstTrack()
+                this.p_idx = this.p_track.GetLastIndex()
             }
-            p0 = t.points[idx]
-            p1 = t.points[idx - 1]
-            idx--;
+
+            p0 = this.p_track.points[this.p_idx]
+            p1 = this.p_track.points[this.p_idx-1]
+            this.p_idx--
         }
-        
-        return p5.Vector.sub(p1,p0).normalize().mult(d).add(p0)
+       
+        return p5.Vector.sub(p1,p0).normalize().mult(max_dist).add(p0)
     }
 
-     calcReversePoint(d,idx){
-        let d1 = this.pos.dist(this.track.points[idx])
-        let t = this.track;
-        let p0 = this.pos
-        let p1 = t.points[idx]
 
+    calcReversePoint(max_dist,idx){
+        let p0 = this.points[idx - 1] // look at first point
+        let p1 = this.p_track.points[this.p_idx]  // set second control point to prev point
+        let d = p0.dist(p1)
 
-        while(d > d1){
-            d -= d1
-            if(idx == t.GetLastIndex()){
-                t = t.GetLastTrack()
-            
-                if(!t)break;
-                idx = 0
-            } 
-
-            if(t){
-                d1 = t.GetLeg(idx)
-            } else {
-                break;
+        if(max_dist > d){
+            max_dist -=d
+            if(this.p_idx == this.p_track.GetLastIndex()){
+                this.p_track = this.p_track.GetLastTrack()
+                this.p_idx = 0
             }
-            p0 = t.points[idx]
-            p1 = t.points[idx + 1]
-            idx++;
+
+            p0 = this.p_track.points[this.p_idx]
+            p1 = this.p_track.points[this.p_idx+1]
+            this.p_idx++
         }
-        
-        return p5.Vector.sub(p1,p0).normalize().mult(d).add(p0)
+       
+        return p5.Vector.sub(p1,p0).normalize().mult(max_dist).add(p0)
     }
 
     updatePoints(){
         this.points[0] = this.pos;
-       
+        this.p_idx = this.index;
+        this.p_track = this.track;
        for(let i =1; i < this.cart_num; i++){
         if(this.reverse){
-             this.points[i] = this.calcReversePoint(this.spacing*i,this.index)
+             this.points[i] = this.calcReversePoint(this.spacing,i)
         } else {
-            this.points[i] = this.calcPoint(this.spacing*i,this.index)
+            this.points[i] = this.calcPoint(this.spacing,i)
         }
        }
     }
