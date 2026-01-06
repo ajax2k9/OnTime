@@ -10,7 +10,7 @@ class TrainStation{
         this.name = name    
         this.track = trk
         this.cycles = 1/2;
-        this.nextTime = interval/this.cycles;
+        this.nextTime = this.interval/this.cycles;
         this.crafting = false;
         this.cogAng = 0;
     }
@@ -20,10 +20,6 @@ class TrainStation{
         this.addReq(input,0)
         this.addItem(output,0)
         this.recipe={"in":input,"out":output}
-    }
-
-    addTrain(cart_num,reverse){
-        trains.push(new Train(cart_num,this.track,this.c_idx,reverse))
     }
 
     addItem(name,quant){
@@ -52,10 +48,10 @@ class TrainStation{
     }
 
     draw(){
-        if(startClock){
-            if(time >this.nextTime){
+        if(clock.startClock){
+            if(this.time >this.nextTime){
                 this.HandleProcess();
-                this.nextTime += interval/this.cycles
+                this.nextTime += clock.interval/this.cycles
             }
         } 
         let x1 = this.points[0].x - 5

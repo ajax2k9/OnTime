@@ -10,6 +10,10 @@ class Clock {
         this.ang = 0;
         this.d_ang = 0;
         this.doAction = false;
+        this.startClock = false;
+        this.time = 0;
+        this.interval = 2;
+        this.nextTime = 2;
     }
 
     calcSlots(){
@@ -112,6 +116,13 @@ class Clock {
     }
 
     draw(){
+        if(this.startClock){
+        this.time+=1/frameRate();
+        if(this.time >= this.nextTime){
+            this.IncrementPos();
+            this.nextTime+= this.interval
+        }
+    }
         this.drawFace()
         this.drawRings()
         this.drawSlots()

@@ -1,17 +1,9 @@
-let tracks =[];
 let clock;
-let basket;
 let imgs = {};
 let img_names = ["coin","switch","train_front","train_body","person","log","coal","in","out","cog"];
-let switches;
 let spacing = 25;
-let bgColor;
-let trains = [];
-let stations = []
-let startClock = false;
-let time = 0;
-let interval = 2;
-let nextTime = 2;
+let level;
+
 function preload(){
 
     img_names.forEach(iname=>{
@@ -21,108 +13,40 @@ function preload(){
     })
 }
 
-
 function setup(){
     const canvas = createCanvas(800, 1000);
     imageMode(CENTER)
     colorMode(HSL)
     angleMode(DEGREES)
-    canvas.elt.oncontextmenu = () => false; // Disables the context menu
-
-   tracks.push(new Track([vec(-6,0),vec(-5,0)]));
-
-   tracks.push(new Track([
-    vec(-5,0),
-    vec(-4,-1),
-    vec(-2,-1),
-    vec(-1,0)
-   ]));  
-   
-   
-   tracks.push(new Track([vec(-5,0),vec(-1,0)])); 
-   tracks.push(new Track([vec(-1,0),vec(2,0)]));
-   tracks.push(new Track([vec(-8,0),vec(-6,0)]));
-   tracks.push(new Track([vec(2,0),vec(4,0)]));
-
-   weldTracks(tracks[4],tracks[0])
-   weldTracks(tracks[3],tracks[5])
-   switches = new SwitchGroup(1);
-   switches.addSwitch(tracks[0],tracks[1],tracks[2],false)
-   switches.addSwitch(tracks[3],tracks[1],tracks[2],true)
-
-   clock = new Clock();
-   basket = new CoinBasket();
-   let station = new TrainStation(0,"Guss",tracks[4])
-   station.addItem("log",5)
-   station.addReq("coal",0)
-   station.addTrain(3,false)
-   stations.push(station)
-
-   station = new TrainStation(1,"Doug",tracks[5])
-   station.setRecipe("log","coal")
-   stations.push(station)
-
-   station = new TrainStation(2,"Gary",tracks[1],1,2)
-   stations.push(station)
-
-   basket.addCoin(trains[0],imgs["coin"])
-   basket.addCoin(trains[0],imgs["coin"])
-   basket.addCoin(trains[0],imgs["coin"])
-   basket.addCoin(switches,imgs["switch"])
+    // canvas.elt.oncontextmenu = () => false; // Disables the context menu
+    clock = new Clock();
+    level = new Level();
+    level.AddTrack([[-10,0],[-8,0]])
+    level.AddTrack([[-8,0],[-6,0]])
+    level.weldTracks()
 } 
+
 function keyPressed(event){
     if(key == ' '){
         event.preventDefault()
-        // startClock = !startClock;
-        trains[0].doAction()
-    }
+        clock.startClock = !clock.startClock;
 
-    if(key == 'r'){
-        for(let i =0; i < 2; i++){
-
-        }
-        noLoop()
     }
 }
 function mouseReleased(){
     clock.checkCoins();
-    basket.checkCoins();
+    level.basket.checkCoins();
     sel_coin = undefined
 }
 
 function draw(){
-    if(startClock){
-        time+=1/frameRate();
-        if(time >= nextTime){
-            clock.IncrementPos();
-            nextTime+= interval
-        }
-    }
 
     fill(255)
     background(220,30,60);
     translate(width/2,width/2)
     
     clock.draw()
-    basket.draw()
-
-    stations.forEach(s=>s.draw());
-   
-    tracks.forEach(t => {
-       t.draw() 
-    });
-
-    switches.draw()
-    trains.forEach(t=>t.draw())
-    basket.drawCoins();
+    level.draw()
 }
 
-function weldTracks(trk1,trk2){
-    trk1.SetLastTrack(trk2)
-    trk2.SetFirstTrack(trk1)
-}
-
-function vec(x,y){
-    return createVector(x,y).mult(spacing)
-}
 
