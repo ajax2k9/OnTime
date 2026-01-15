@@ -32,14 +32,8 @@ class Level {
         this.stations.push(stn)
     }
 
-    AddTrack(points){
-        let pts = [];
-        
-        points.forEach(p=>{
-            pts.push(createVector(p[0]*spacing,p[1]*spacing))
-        })
-
-        this.tracks.push(new Track(pts))
+    AddTrack(track){
+        this.tracks.push(track)
     }
 
     AddTrain(t_idx,c_idx,cart_num,reverse){
@@ -75,10 +69,23 @@ class Level {
         this.basket.drawCoins();
     }
 
-    weldTracks(t_idx1,t_idx2){
-        let trk1 = this.tracks[t_idx1]
-        let trk2 = this.tracks[t_idx2]
+    weldTracks(trk1,trk2){
         trk1.SetLastTrack(trk2)
         trk2.SetFirstTrack(trk1)
+    }
+
+    weldAllTracks(){
+        this.tracks.forEach(t1=>{
+            if(!t1.GetFirstTrack() || !t1.GetLastTrack()){
+                this.tracks.forEach(t2=>{
+                    if(t2.points[0].dist(t1.GetLastPoint())<spacing){
+                        this.weldTracks(t1,t2)
+                    }
+                    if(t1.points[0].dist(t2.GetLastPoint())<spacing){
+                        this.weldTracks(t2,t1)
+                    }
+                })
+            }
+        })
     }
 }

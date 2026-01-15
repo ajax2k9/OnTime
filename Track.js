@@ -3,6 +3,10 @@ class Track {
         this.points = points;
     }
 
+    AddPoint(point){
+        this.points.push(point)
+    }
+
     SetStation(station,p1,p2){
         this.points[p1].station = station;
         this.points[p2].station = station;

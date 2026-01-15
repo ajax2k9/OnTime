@@ -3,7 +3,7 @@ let imgs = {};
 let img_names = ["coin","switch","train_front","train_body","person","log","coal","in","out","cog"];
 let spacing = 25;
 let level;
-
+let editor;
 function preload(){
 
     img_names.forEach(iname=>{
@@ -18,12 +18,10 @@ function setup(){
     imageMode(CENTER)
     colorMode(HSL)
     angleMode(DEGREES)
-    // canvas.elt.oncontextmenu = () => false; // Disables the context menu
+    canvas.elt.oncontextmenu = () => false; // Disables the context menu
     clock = new Clock();
     level = new Level();
-    level.AddTrack([[-10,0],[-8,0]])
-    level.AddTrack([[-8,0],[-6,0]])
-    level.weldTracks()
+    editor = new Editor()
 } 
 
 function keyPressed(event){
@@ -39,12 +37,20 @@ function mouseReleased(){
     sel_coin = undefined
 }
 
+function mousePressed(){
+    if(editor.active){
+        editor.HandleClick()
+    }
+}
+
+
+
 function draw(){
 
     fill(255)
     background(220,30,60);
     translate(width/2,width/2)
-    
+    editor.draw()
     clock.draw()
     level.draw()
 }
